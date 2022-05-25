@@ -1,0 +1,40 @@
+gamma(E) -> rax prend la valeur du résultat
+gamma(n) donne mov rax,n
+gamma(x dans Variables) donne mov rax,[X]
+gamma(E1+E2) donne
+    gamme(E1)
+    push rax (on met dans la pile)
+    gamma(E2)
+    pop rbx (valeur de E2)
+    pop rax (valeur de E1)
+    add rax,rbx
+ou
+    gamma(E2)
+    push rax
+    gamma(E1)
+    pop rbx
+    add rax,rbx
+
+Commande C = X=E (pour X variable, E expression)
+gamma(C) -> instructions à l'issue desquelles on a évalué C
+gamma(X=E) -> gamma(E) puis mov [X],rax 
+gamma(C1;C2) -> gamma(C1) puis gamma(C2)
+gamma( if(E) {C}) donne
+    gamma(E)
+    cmp rax,0
+    jz fin1
+    gamma(C)
+    fin1
+gamma( while(E) {C}) donne 
+deb:gamma(E)
+    cmp rax,0
+    jz fin
+    gamma(C)
+    jmp deb
+fin:    
+gamma( printf(E)) donne 
+    gamma(E)
+    mov rdi,fmt  (format)
+    mov rsi,rax
+    xor rax,rax
+    call printf
